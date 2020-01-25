@@ -1,22 +1,48 @@
-# Jekyll MiniMagick new
 MiniMagick integration for Jekyll
+=================================
 
-This is an updated and working version of [zroger's Ruby Gem](https://github.com/zroger/jekyll-minimagick), integrating new features and bugfixes from pull requests and the issue queue which haven't yet made their way back into the code.
+This gem allows you to easily use MiniMagick to crop and resize images in your
+Jekyll project, according to a preset defined in your config file.
 
-Put the file in your `_plugins` folder and add the jekyll-minimagick dependency to your config. You'll also need ImageMagick itself.
+Basic Setup
+-----------
+Install the gem:
 
-Presets are defined in `_config.yml` like so:
+	[sudo] gem install jekyll-minimagick
 
-```
-mini_magick:
-    thumbnail: # Preset name
-        source: images/originals # source directory - change this to whatever you want
-        destination: images/thumbnail # generated destination directory
-        resize: "100x70^" # standard imagemagick options - you can chain multiple commands
-        gravity: "center"
-        extent: "100x70"
-```
+In a plugin file within your Jekyll project's _plugins directory:
 
-This will scale and crop all images in `images/originals` to 100x70 pixels and save them into `_site/images/thumbnail` on build.
+	# _plugins/my-plugin.rb
+	require "jekyll-minimagick"
 
-See [here](https://www.kevan.tv/articles/automatic-image-resizing-with-jekyll-and-imagemagick/) for full instructions
+Define presets in your _config.yml file, like this:
+
+	# _config.yml
+	mini_magick:
+		thumbnail:
+			source: img/photos/original
+			destination: img/photos/thumbnail
+			resize: "100x100"
+		medium:
+			source: img/photos/original
+			destination: img/photos/medium
+			resize: "600x400"
+
+This configuration will create a 100x100 thumbnail for each image in 
+_img/photos/original_ and put it in _\_site/img/photos/thumbnail_ and a 600x400
+image in _\_site/img/photos/medium_.
+
+Bundler Setup
+-------------
+Already using bundler to manage gems for your Jekyll project?  Then just add
+
+	gem "jekyll-minimagick"
+
+to your gemfile and create the following plugin in your projects _plugins 
+directory.  I've called mine bundler.rb.  This will automatically require all 
+of the gems specified in your Gemfile.
+
+	# _plugins/bundler.rb
+	require "rubygems"
+	require "bundler/setup"
+	Bundler.require(:default)
